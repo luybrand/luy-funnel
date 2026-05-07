@@ -229,11 +229,94 @@ footer strong{color:var(--gold);}
 
 @keyframes fadeUp{from{opacity:0;transform:translateY(28px);}to{opacity:1;transform:translateY(0);}}
 
+/* ── SCROLL PROGRESS ── */
+#scroll-progress{
+  position:fixed;top:0;left:0;width:0%;height:3px;z-index:9999;
+  background:linear-gradient(90deg,var(--green),var(--blue));
+  border-radius:0 2px 2px 0;
+  box-shadow:0 0 8px rgba(16,185,129,.5);
+}
+
+/* ── FLOATING ORBS ── */
+.conf-orb{position:fixed;border-radius:50%;filter:blur(90px);pointer-events:none;z-index:0;}
+.conf-orb-1{width:450px;height:450px;background:rgba(16,185,129,.08);top:-100px;right:-100px;animation:orb1 18s ease-in-out infinite;}
+.conf-orb-2{width:350px;height:350px;background:rgba(37,99,235,.07);bottom:10%;left:-80px;animation:orb2 14s ease-in-out infinite;}
+@keyframes orb1{0%,100%{transform:translate(0,0);}50%{transform:translate(-40px,30px);}}
+@keyframes orb2{0%,100%{transform:translate(0,0);}50%{transform:translate(40px,-30px);}}
+
+/* ── SUCCESS RING PULSE ── */
+.success-icon{position:relative;}
+.success-icon::after{
+  content:'';position:absolute;inset:-12px;border-radius:50%;
+  border:2px solid rgba(16,185,129,.3);
+  animation:ringPulse 2s ease-in-out infinite;
+}
+@keyframes ringPulse{0%{transform:scale(1);opacity:.7;}100%{transform:scale(1.4);opacity:0;}}
+
+/* ── STEP CARD HOVER ── */
+.step-card{transition:border-color .3s,transform .3s,box-shadow .3s;}
+.step-card:hover{border-color:rgba(37,99,235,.35)!important;transform:translateX(5px);box-shadow:0 8px 30px rgba(37,99,235,.1);}
+.step-num{transition:transform .2s,box-shadow .2s;}
+.step-card:hover .step-num{transform:scale(1.1) rotate(-4deg);box-shadow:0 6px 20px rgba(37,99,235,.5);}
+
+/* ── TELEGRAM BUTTON SHIMMER ── */
+.btn-telegram{position:relative;overflow:hidden;}
+.btn-telegram::before{
+  content:'';position:absolute;top:0;left:-100%;width:60%;height:100%;
+  background:linear-gradient(120deg,transparent,rgba(255,255,255,.25),transparent);
+  animation:btnShimmer 3s ease-in-out infinite;
+}
+@keyframes btnShimmer{0%{left:-100%;}35%,100%{left:160%;}}
+
+/* ── WEBINAR DETAIL ROW HOVER ── */
+.detail-row{transition:background .2s;border-radius:8px;padding:10px 8px;}
+.detail-row:hover{background:rgba(255,255,255,.03);}
+
+/* ── MOBILE (< 480px) ── */
+@media(max-width:480px){
+  .page-wrap{padding:40px 14px 110px;}
+  .telegram-cta{padding:22px 14px;}
+  .webinar-countdown{padding:18px 14px;}
+  .webinar-details{padding:18px 14px;}
+  .wc-num{font-size:22px;min-width:44px;padding:6px 8px;}
+  .wc-sep{font-size:20px;}
+  .share-btns{flex-direction:column;}
+  .share-btn{justify-content:center;}
+  h1.confirm-title{font-size:clamp(20px,6vw,28px);}
+}
+
+/* ── TABLET (640px – 1023px) ── */
+@media(min-width:640px){
+  .page-wrap{max-width:620px;padding:64px 32px 120px;}
+  .steps{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  .step-card:nth-child(3){grid-column:1/-1;}
+  .wc-num{font-size:30px;min-width:58px;}
+  h1.confirm-title{font-size:clamp(28px,4vw,38px);}
+}
+
+/* ── PC (1024px – 1399px) ── */
+@media(min-width:1024px){
+  .page-wrap{max-width:720px;padding:72px 0 120px;}
+  .webinar-countdown{padding:32px 40px;}
+  .telegram-cta{padding:40px;}
+  .steps{grid-template-columns:1fr 1fr 1fr;gap:16px;}
+  .step-card:nth-child(3){grid-column:auto;}
+}
+
+/* ── WIDE PC (1400px+) ── */
+@media(min-width:1400px){
+  .page-wrap{max-width:800px;padding:80px 0 120px;}
+  h1.confirm-title{font-size:44px;}
+  .confirm-sub{font-size:16px;}
+  .telegram-cta h2{font-size:26px;}
+  .btn-telegram{font-size:17px;padding:16px 38px;}
+  .wc-num{font-size:34px;min-width:64px;padding:10px 14px;}
+  .step-card{padding:26px 28px;}
+  .step-num{width:50px;height:50px;min-width:50px;font-size:20px;}
+}
+
+/* Existing mobile override */
 @media(max-width:600px){
-  .page-wrap{padding:48px 16px 110px;}
-  .telegram-cta{padding:24px 16px;}
-  .webinar-countdown{padding:20px 16px;}
-  .webinar-details{padding:20px 16px;}
   .sticky-inner{gap:8px;}
   #toast-container{bottom:72px;}
 }
@@ -241,8 +324,11 @@ footer strong{color:var(--gold);}
 </head>
 <body>
 
+<div id="scroll-progress"></div>
 <canvas id="confetti-canvas"></canvas>
 <div class="page-glow"></div>
+<div class="conf-orb conf-orb-1"></div>
+<div class="conf-orb conf-orb-2"></div>
 
 <!-- STICKY BAR -->
 <div id="sticky-bar">
@@ -359,6 +445,13 @@ footer strong{color:var(--gold);}
 <script>
 const TELEGRAM_LINK = 'https://t.me/sene30hamdifeki';
 const WEBINAR_DATE  = new Date('2026-05-15T17:00:00.000Z');
+
+/* ── Scroll progress ── */
+const sp = document.getElementById('scroll-progress');
+window.addEventListener('scroll', () => {
+  const max = document.body.scrollHeight - window.innerHeight;
+  if (sp && max > 0) sp.style.width = (window.scrollY / max * 100) + '%';
+}, {passive:true});
 
 /* ── Name from URL ── */
 const params = new URLSearchParams(window.location.search);
