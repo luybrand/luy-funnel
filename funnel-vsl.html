@@ -40,66 +40,69 @@ a{color:inherit;}
 .center{text-align:center;}
 section{padding:80px 0;}
 
-/* ─── COUNTDOWN BAR ───────────────────────────────────── */
-#cbar{
+/* ─── COMBINED TOPBAR (logo + countdown + cta) ─────────── */
+#topbar{
   position:fixed;top:0;left:0;right:0;z-index:999;
-  background:rgba(10,10,14,0.94);
+  background:rgba(10,10,14,0.96);
   backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
   border-bottom:1px solid rgba(255,255,255,0.06);
-  display:flex;align-items:center;justify-content:center;
-  gap:14px;padding:10px 16px;flex-wrap:wrap;
+  padding:0 20px;height:52px;
 }
-#cbar .cb-label{font-size:12px;color:var(--muted-d);white-space:nowrap;}
-.cd{display:flex;gap:6px;align-items:center;}
+.topbar-inner{
+  max-width:1200px;margin:0 auto;height:100%;
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+}
+/* Brand — left */
+.topbar-brand{display:flex;align-items:center;gap:8px;flex-shrink:0;}
+.topbar-logo{height:30px;width:auto;object-fit:contain;border-radius:5px;}
+.topbar-text{display:flex;flex-direction:column;line-height:1.2;}
+.topbar-name{font-size:12px;font-weight:800;color:var(--white);}
+.topbar-sub{font-size:9px;color:var(--muted-d);letter-spacing:.3px;}
+/* Countdown — center */
+.topbar-cd{
+  display:flex;align-items:center;gap:8px;
+  flex:1;justify-content:center;flex-wrap:nowrap;
+}
+.cb-label{font-size:11px;color:var(--muted-d);white-space:nowrap;}
+.cd{display:flex;gap:4px;align-items:center;}
 .cd-unit{display:flex;flex-direction:column;align-items:center;}
 .cd-n{
   background:var(--blue);color:#fff;
-  font-size:17px;font-weight:800;
-  padding:3px 10px;border-radius:8px;min-width:38px;text-align:center;line-height:1.4;
-  box-shadow:0 0 14px rgba(37,99,235,0.5);
+  font-size:14px;font-weight:800;
+  padding:3px 8px;border-radius:6px;min-width:30px;text-align:center;line-height:1.4;
+  box-shadow:0 0 10px rgba(37,99,235,0.5);
   transition:transform .12s ease;
 }
 .cd-n.flip{transform:scaleY(0.8);}
-.cd-l{font-size:8px;color:var(--muted-d);margin-top:3px;text-transform:uppercase;letter-spacing:1px;}
-.cd-sep{font-size:18px;font-weight:900;color:var(--blue);margin-bottom:10px;animation:sepPulse 1s ease-in-out infinite;}
+.cd-l{font-size:7px;color:var(--muted-d);margin-top:2px;text-transform:uppercase;letter-spacing:.8px;}
+.cd-sep{font-size:14px;font-weight:900;color:var(--blue);margin-bottom:10px;animation:sepPulse 1s ease-in-out infinite;}
 @keyframes sepPulse{0%,100%{opacity:1;}50%{opacity:.2;}}
-#cbar .cb-date{font-size:12px;color:var(--gold);font-weight:600;white-space:nowrap;}
-
-/* ─── TOP NAV ─────────────────────────────────────────── */
-#topnav{
-  position:fixed;top:44px;left:0;right:0;z-index:998;
-  background:rgba(10,10,14,.88);
-  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
-  border-bottom:1px solid rgba(255,255,255,.05);
-  padding:10px 20px;
-}
-.topnav-inner{
-  max-width:1100px;margin:0 auto;
-  display:flex;align-items:center;justify-content:space-between;gap:12px;
-}
-.topnav-brand{display:flex;align-items:center;gap:10px;}
-.topnav-logo{height:36px;width:auto;object-fit:contain;border-radius:6px;}
-.topnav-text{display:flex;flex-direction:column;}
-.topnav-name{font-size:13px;font-weight:800;color:var(--white);letter-spacing:.3px;line-height:1.2;}
-.topnav-sub{font-size:10px;color:var(--muted-d);letter-spacing:.3px;}
-.topnav-cta{
+.cb-date{font-size:11px;color:var(--gold);font-weight:600;white-space:nowrap;}
+/* CTA — right */
+.topbar-cta{
+  flex-shrink:0;
   background:var(--blue);color:#fff;
   font-size:12px;font-weight:700;
-  padding:8px 18px;border-radius:100px;
+  padding:7px 16px;border-radius:100px;
   border:none;cursor:pointer;font-family:inherit;
-  white-space:nowrap;transition:background .2s,transform .15s;
-  box-shadow:0 4px 14px rgba(37,99,235,.35);
+  white-space:nowrap;
+  transition:background .2s,transform .15s;
+  box-shadow:0 4px 12px rgba(37,99,235,.4);
 }
-.topnav-cta:hover{background:var(--blue-h);transform:translateY(-1px);}
+.topbar-cta:hover{background:var(--blue-h);transform:translateY(-1px);}
+/* Mobile adjustments */
+@media(max-width:700px){
+  .cb-label,.cb-date,.topbar-sub{display:none;}
+  .topbar-text{display:none;}
+}
 @media(max-width:480px){
-  .topnav-cta{display:none;}
-  .topnav-sub{display:none;}
-  #topnav{top:40px;}
+  .topbar-cta{display:none;}
+  #topbar{padding:0 12px;}
 }
 
 /* ─── HERO ────────────────────────────────────────────── */
 .hero{
-  padding:152px 0 64px;
+  padding:92px 0 56px;
   position:relative;overflow:hidden;
   background:var(--bg);
 }
@@ -115,8 +118,8 @@ section{padding:80px 0;}
   display:inline-flex;align-items:center;gap:7px;
   border:1px solid rgba(255,255,255,0.12);
   color:var(--white);font-size:11px;font-weight:600;
-  padding:6px 16px;border-radius:100px;
-  margin-bottom:30px;letter-spacing:.6px;text-transform:uppercase;
+  padding:5px 14px;border-radius:100px;
+  margin-bottom:18px;letter-spacing:.6px;text-transform:uppercase;
   background:rgba(255,255,255,0.03);backdrop-filter:blur(6px);
 }
 .hero-badge .dot{
@@ -129,19 +132,19 @@ section{padding:80px 0;}
 /* Titles */
 .hero-title-am{
   font-family:'Noto Sans Ethiopic',sans-serif;
-  font-size:clamp(30px,5.5vw,54px);
-  font-weight:900;line-height:1.15;
+  font-size:clamp(22px,3.8vw,40px);
+  font-weight:900;line-height:1.22;
   color:var(--gold);
-  margin-bottom:14px;
+  margin-bottom:10px;
   overflow:hidden;
 }
 /* Word wrapper for animation */
 .hw{display:inline-block;will-change:transform,opacity;}
 
 .hero-title-en{
-  font-size:clamp(14px,2vw,18px);
-  font-weight:600;color:rgba(255,255,255,0.82);
-  line-height:1.55;max-width:600px;margin:0 auto 36px;
+  font-size:clamp(13px,1.6vw,16px);
+  font-weight:600;color:rgba(255,255,255,0.78);
+  line-height:1.5;max-width:580px;margin:0 auto 18px;
   letter-spacing:.1px;
 }
 
@@ -149,7 +152,7 @@ section{padding:80px 0;}
 .video-wrap{
   position:relative;background:#0D1117;
   border-radius:var(--radius);overflow:hidden;
-  aspect-ratio:16/9;margin-bottom:32px;
+  aspect-ratio:16/9;margin-bottom:22px;
   border:1px solid rgba(37,99,235,0.2);
   animation:videoGlow 4s ease-in-out infinite;
 }
@@ -490,7 +493,7 @@ footer strong{color:var(--gold);}
   .cd-n{font-size:14px;padding:2px 8px;min-width:30px;}
   .cd-sep{font-size:15px;}
   #cbar .cb-date{display:none;}
-  .hero{padding:140px 0 48px;}
+  .hero{padding:82px 0 44px;}
   .hero-title-am{font-size:clamp(22px,7vw,32px);}
   .hero-title-en{font-size:14px;}
   .btn-hero{font-size:14px;padding:13px 26px;}
@@ -550,33 +553,34 @@ footer strong{color:var(--gold);}
   </div>
 </div>
 
-<!-- ████ TOP NAVBAR ████ -->
-<nav id="topnav">
-  <div class="topnav-inner">
-    <div class="topnav-brand">
-      <img src="luy-logo.jpg" alt="Luy Systems" class="topnav-logo">
-      <div class="topnav-text">
-        <span class="topnav-name">Luy Systems</span>
-        <span class="topnav-sub">Presented by Mr. Hamdifeki</span>
+<!-- ████ COMBINED TOPBAR ████ -->
+<div id="topbar">
+  <div class="topbar-inner">
+    <!-- Left: Brand -->
+    <div class="topbar-brand">
+      <img src="luy-logo.jpg" alt="Luy Systems" class="topbar-logo">
+      <div class="topbar-text">
+        <span class="topbar-name">Luy Systems</span>
+        <span class="topbar-sub">Presented by Mr. Hamdifeki</span>
       </div>
     </div>
-    <button class="topnav-cta" onclick="document.getElementById('reg').scrollIntoView({behavior:'smooth'})">Register Free →</button>
+    <!-- Center: Countdown -->
+    <div class="topbar-cd" id="topbar-cd">
+      <span class="cb-label">🔥 ዌቢናሩ —</span>
+      <div class="cd">
+        <div class="cd-unit"><span class="cd-n" id="cd-days">00</span><div class="cd-l">D</div></div>
+        <span class="cd-sep">:</span>
+        <div class="cd-unit"><span class="cd-n" id="cd-hours">00</span><div class="cd-l">H</div></div>
+        <span class="cd-sep">:</span>
+        <div class="cd-unit"><span class="cd-n" id="cd-mins">00</span><div class="cd-l">M</div></div>
+        <span class="cd-sep">:</span>
+        <div class="cd-unit"><span class="cd-n" id="cd-secs">00</span><div class="cd-l">S</div></div>
+      </div>
+      <span class="cb-date">📅 May 15</span>
+    </div>
+    <!-- Right: CTA -->
+    <button class="topbar-cta" onclick="document.getElementById('reg').scrollIntoView({behavior:'smooth'})">Register Free →</button>
   </div>
-</nav>
-
-<!-- ████ COUNTDOWN BAR ████ -->
-<div id="cbar">
-  <span class="cb-label">🔥 ዌቢናሩ ይጀምራል —</span>
-  <div class="cd">
-    <div class="cd-unit"><span class="cd-n" id="cd-days">00</span><div class="cd-l">Days</div></div>
-    <span class="cd-sep">:</span>
-    <div class="cd-unit"><span class="cd-n" id="cd-hours">00</span><div class="cd-l">Hrs</div></div>
-    <span class="cd-sep">:</span>
-    <div class="cd-unit"><span class="cd-n" id="cd-mins">00</span><div class="cd-l">Min</div></div>
-    <span class="cd-sep">:</span>
-    <div class="cd-unit"><span class="cd-n" id="cd-secs">00</span><div class="cd-l">Sec</div></div>
-  </div>
-  <span class="cb-date">📅 May 15 — ነፃ ዌቢናር</span>
 </div>
 
 <!-- ████ HERO ████ -->
@@ -618,7 +622,7 @@ footer strong{color:var(--gold);}
       </iframe>
     </div>
 
-    <p class="hero-sub" id="h4" style="font-size:clamp(13px,1.8vw,16px);color:var(--muted-d);line-height:1.75;max-width:560px;margin:0 auto 32px;">
+    <p class="hero-sub" id="h4" style="font-size:clamp(12px,1.5vw,14px);color:var(--muted-d);line-height:1.7;max-width:540px;margin:0 auto 22px;">
       ምንም ዋጋ አይከፍሉም — <strong style="color:rgba(255,255,255,.85);">75 ደቂቃ ብቻ።</strong>
       ምን ሰነዶች ያስፈልጉዎ፣ ምን ቅናሾችን እያሳጡዎ እንደሆነ፣
       እና ሰኔ 30 ፊት ሙሉ ዝግጁ ሆነው ለመቅረብ — ሌሎቹ ሲደናገጡ።
@@ -960,7 +964,7 @@ let prevVals = {};
 function tick() {
   const diff = CONFIG.WEBINAR_DATE - new Date();
   if (diff <= 0) {
-    document.getElementById('cbar').innerHTML = '<span style="color:#22C55E;font-weight:700;font-size:13px;">🔴 ዌቢናሩ LIVE ነው — አሁን Telegram ይቀላቀሉ!</span>';
+    document.getElementById('topbar-cd').innerHTML = '<span style="color:#22C55E;font-weight:700;font-size:13px;">🔴 ዌቢናሩ LIVE ነው!</span>';
     document.getElementById('sticky-cd').textContent = '🔴 LIVE NOW';
     return;
   }
