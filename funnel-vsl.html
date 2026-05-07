@@ -1,0 +1,1267 @@
+<!DOCTYPE html>
+<html lang="am">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ሰኔ 30 Survival Guide — ነፃ ዌቢናር | Hamdi Adil</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Ethiopic:wght@400;600;700;900&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+<!--
+  ╔══════════════════════════════════════════════════════════╗
+  ║  SETUP: GOOGLE SHEETS INTEGRATION                        ║
+  ║                                                          ║
+  ║  1. Go to script.google.com                              ║
+  ║  2. New Project → paste code from funnel-setup.js        ║
+  ║  3. Deploy → Web App                                     ║
+  ║     Execute as: Me                                       ║
+  ║     Who has access: Anyone                               ║
+  ║  4. Copy the Web App URL                                 ║
+  ║  5. Replace GOOGLE_SHEET_URL below with your URL         ║
+  ║                                                          ║
+  ║  ALSO REPLACE:                                           ║
+  ║  - TELEGRAM_INVITE_LINK → your Telegram group link       ║
+  ║  - WEBINAR_DATE → May 15, 2026 time in UTC               ║
+  ╚══════════════════════════════════════════════════════════╝
+-->
+
+<style>
+:root {
+  --gold: #F0A500;
+  --gold-light: #FFD166;
+  --navy: #0D1B3E;
+  --navy-mid: #1A2D5A;
+  --red: #E63946;
+  --bg: #F7F8FC;
+  --white: #FFFFFF;
+  --text: #1A1A2E;
+  --muted: #6B7280;
+  --border: rgba(240,165,0,0.2);
+  --card-shadow: 0 20px 60px rgba(13,27,62,0.12);
+  --card-shadow-hover: 0 30px 80px rgba(13,27,62,0.2);
+  --radius: 20px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  overflow-x: hidden;
+}
+
+.am { font-family: 'Noto Sans Ethiopic', sans-serif; }
+
+/* ─── BLOB BACKGROUND ─────────────────────────────────── */
+.blobs {
+  position: fixed; top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none; z-index: 0;
+  overflow: hidden;
+}
+.blob {
+  position: absolute; border-radius: 50%;
+  filter: blur(80px); opacity: 0.12;
+}
+.blob-1 {
+  width: 600px; height: 600px;
+  background: radial-gradient(circle, #F0A500, #FFD166);
+  top: -200px; right: -200px;
+  animation: floatBlob1 12s ease-in-out infinite;
+}
+.blob-2 {
+  width: 500px; height: 500px;
+  background: radial-gradient(circle, #0D1B3E, #1A2D5A);
+  bottom: -150px; left: -150px;
+  animation: floatBlob2 15s ease-in-out infinite;
+}
+.blob-3 {
+  width: 300px; height: 300px;
+  background: radial-gradient(circle, #E63946, #FF8C94);
+  top: 40%; right: 10%;
+  animation: floatBlob1 10s ease-in-out infinite reverse;
+}
+@keyframes floatBlob1 {
+  0%, 100% { transform: translate(0,0) scale(1); }
+  33% { transform: translate(40px,-60px) scale(1.1); }
+  66% { transform: translate(-30px,40px) scale(0.9); }
+}
+@keyframes floatBlob2 {
+  0%, 100% { transform: translate(0,0) scale(1); }
+  50% { transform: translate(60px,-40px) scale(1.15); }
+}
+
+/* ─── STICKY COUNTDOWN BAR ────────────────────────────── */
+.countdown-bar {
+  position: fixed; top: 0; left: 0; right: 0;
+  background: linear-gradient(135deg, var(--navy) 0%, var(--navy-mid) 100%);
+  color: white; text-align: center;
+  padding: 10px 20px; z-index: 1000;
+  display: flex; align-items: center; justify-content: center; gap: 16px;
+  box-shadow: 0 2px 20px rgba(0,0,0,0.3);
+}
+.countdown-bar .fire { font-size: 18px; animation: pulse 1s ease-in-out infinite; }
+@keyframes pulse { 0%,100%{transform:scale(1);} 50%{transform:scale(1.3);} }
+.countdown-bar .label { font-size: 13px; color: var(--gold-light); font-weight: 500; }
+.countdown-bar .label .am { font-size: 14px; }
+.flip-clock { display: flex; gap: 8px; align-items: center; }
+.flip-unit {
+  display: flex; flex-direction: column; align-items: center;
+}
+.flip-num {
+  background: var(--gold);
+  color: var(--navy);
+  font-size: 20px; font-weight: 900;
+  padding: 4px 10px; border-radius: 8px;
+  min-width: 42px; text-align: center;
+  box-shadow: 0 4px 12px rgba(240,165,0,0.4);
+  transition: all 0.3s ease;
+}
+.flip-label { font-size: 9px; color: rgba(255,255,255,0.6); margin-top: 2px; letter-spacing: 1px; text-transform: uppercase; }
+.flip-sep { font-size: 20px; font-weight: 900; color: var(--gold); margin-bottom: 12px; }
+
+/* ─── CONTAINER ───────────────────────────────────────── */
+.container { max-width: 1100px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 1; }
+
+/* ─── HERO SECTION ────────────────────────────────────── */
+.hero {
+  min-height: 100vh;
+  padding: 110px 0 80px;
+  display: flex; align-items: center;
+  position: relative;
+}
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: center;
+}
+@media (max-width: 768px) {
+  .hero-grid { grid-template-columns: 1fr; gap: 40px; }
+  .hero-video-wrap { order: -1; }
+}
+
+.badge-pill {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(240,165,0,0.12);
+  border: 1px solid rgba(240,165,0,0.3);
+  color: var(--navy);
+  padding: 6px 16px; border-radius: 100px;
+  font-size: 12px; font-weight: 600;
+  margin-bottom: 20px;
+  animation: fadeDown 0.8s ease forwards;
+}
+.badge-dot { width: 8px; height: 8px; background: var(--red); border-radius: 50%; animation: pulse 1s infinite; }
+
+.hero-headline {
+  font-family: 'Noto Sans Ethiopic', sans-serif;
+  font-size: clamp(28px, 4vw, 46px);
+  font-weight: 900;
+  line-height: 1.2;
+  color: var(--navy);
+  margin-bottom: 16px;
+  animation: fadeUp 0.8s ease 0.2s both;
+}
+.hero-headline .gold { color: var(--gold); }
+.hero-headline .red { color: var(--red); }
+
+.hero-sub {
+  font-size: 16px; line-height: 1.7; color: var(--muted);
+  margin-bottom: 28px;
+  animation: fadeUp 0.8s ease 0.4s both;
+}
+.hero-sub strong { color: var(--navy); }
+
+.hero-bullets {
+  list-style: none; margin-bottom: 32px;
+  animation: fadeUp 0.8s ease 0.5s both;
+}
+.hero-bullets li {
+  display: flex; align-items: flex-start; gap: 10px;
+  font-size: 14px; color: var(--text); margin-bottom: 10px;
+}
+.hero-bullets li::before {
+  content: '✓';
+  width: 22px; height: 22px; min-width: 22px;
+  background: var(--gold); color: var(--navy);
+  border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 900; margin-top: 1px;
+}
+
+/* ─── REGISTRATION FORM ───────────────────────────────── */
+.reg-card {
+  background: white;
+  border-radius: var(--radius);
+  padding: 32px;
+  box-shadow: var(--card-shadow);
+  border: 1px solid var(--border);
+  transform: perspective(1000px) rotateY(0deg);
+  transition: all 0.4s ease;
+  animation: fadeUp 0.8s ease 0.6s both;
+}
+.reg-card:hover { box-shadow: var(--card-shadow-hover); transform: perspective(1000px) rotateY(-2deg) translateY(-4px); }
+.reg-title {
+  font-family: 'Noto Sans Ethiopic', sans-serif;
+  font-size: 18px; font-weight: 700; color: var(--navy);
+  margin-bottom: 6px; text-align: center;
+}
+.reg-subtitle { font-size: 12px; color: var(--muted); text-align: center; margin-bottom: 20px; }
+.form-group { margin-bottom: 14px; }
+.form-group label { display: block; font-size: 12px; font-weight: 600; color: var(--navy); margin-bottom: 6px; }
+.form-group input {
+  width: 100%; padding: 13px 16px;
+  border: 2px solid #E5E7EB;
+  border-radius: 12px; font-size: 15px;
+  font-family: inherit; color: var(--text);
+  background: #FAFAFA;
+  transition: all 0.3s ease; outline: none;
+}
+.form-group input:focus { border-color: var(--gold); background: white; box-shadow: 0 0 0 4px rgba(240,165,0,0.1); }
+.form-group input::placeholder { color: #B0B7C3; }
+
+.btn-register {
+  width: 100%; padding: 16px;
+  background: linear-gradient(135deg, var(--gold) 0%, #E8950A 100%);
+  color: var(--navy); font-size: 17px; font-weight: 800;
+  border: none; border-radius: 14px; cursor: pointer;
+  font-family: 'Noto Sans Ethiopic', sans-serif;
+  position: relative; overflow: hidden;
+  transition: all 0.3s ease;
+  box-shadow: 0 8px 30px rgba(240,165,0,0.4);
+  margin-top: 6px;
+}
+.btn-register::after {
+  content: ''; position: absolute;
+  top: -50%; left: -75%; width: 50%; height: 200%;
+  background: rgba(255,255,255,0.25);
+  transform: skewX(-20deg);
+  animation: shimmer 3s ease-in-out infinite;
+}
+@keyframes shimmer { 0%{left:-75%;} 100%{left:125%;} }
+.btn-register:hover { transform: translateY(-2px); box-shadow: 0 14px 40px rgba(240,165,0,0.5); }
+.btn-register:active { transform: translateY(0); }
+
+.form-trust { display: flex; justify-content: center; gap: 16px; margin-top: 12px; }
+.form-trust span { font-size: 11px; color: var(--muted); display: flex; align-items: center; gap: 4px; }
+
+.spots-left {
+  background: rgba(230,57,70,0.08); border: 1px solid rgba(230,57,70,0.2);
+  color: var(--red); border-radius: 10px; padding: 8px 14px;
+  font-size: 12px; font-weight: 600; text-align: center; margin-bottom: 16px;
+}
+.spots-left span { font-weight: 900; }
+
+/* ─── VSL VIDEO ───────────────────────────────────────── */
+.hero-video-wrap { position: relative; }
+.video-container {
+  background: linear-gradient(135deg, var(--navy) 0%, var(--navy-mid) 100%);
+  border-radius: 24px;
+  aspect-ratio: 16/9;
+  position: relative; overflow: hidden;
+  box-shadow: 0 40px 100px rgba(13,27,62,0.4);
+  cursor: pointer;
+  transition: transform 0.4s ease;
+}
+.video-container:hover { transform: scale(1.02); }
+.video-container iframe {
+  width: 100%; height: 100%; border: none; border-radius: 24px;
+}
+.video-placeholder-overlay {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  background: linear-gradient(135deg, rgba(13,27,62,0.95) 0%, rgba(26,45,90,0.95) 100%);
+}
+.play-btn {
+  width: 80px; height: 80px;
+  background: var(--gold); border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 28px; color: var(--navy);
+  box-shadow: 0 0 0 20px rgba(240,165,0,0.15), 0 0 0 40px rgba(240,165,0,0.05);
+  animation: pulseRing 2s ease-in-out infinite;
+  margin-bottom: 20px;
+}
+@keyframes pulseRing {
+  0%,100%{box-shadow:0 0 0 20px rgba(240,165,0,0.15),0 0 0 40px rgba(240,165,0,0.05);}
+  50%{box-shadow:0 0 0 30px rgba(240,165,0,0.1),0 0 0 60px rgba(240,165,0,0.02);}
+}
+.video-placeholder-overlay h3 {
+  font-family: 'Noto Sans Ethiopic', sans-serif;
+  color: white; font-size: 18px; text-align: center; padding: 0 30px;
+}
+.video-placeholder-overlay p { color: rgba(255,255,255,0.6); font-size: 13px; margin-top: 8px; }
+
+.floating-badge {
+  position: absolute;
+  background: white; border-radius: 14px; padding: 12px 16px;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.15);
+  display: flex; align-items: center; gap: 10px;
+  font-size: 12px; font-weight: 600; color: var(--navy);
+  z-index: 10;
+  animation: float 4s ease-in-out infinite;
+}
+.floating-badge-1 { top: -20px; right: -20px; }
+.floating-badge-2 { bottom: -20px; left: -20px; animation-delay: 2s; }
+.floating-badge .badge-icon { font-size: 22px; }
+@keyframes float { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-10px);} }
+
+/* ─── SOCIAL PROOF BAR ────────────────────────────────── */
+.proof-bar {
+  background: var(--navy);
+  padding: 28px 0;
+  position: relative; z-index: 1;
+}
+.proof-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 20px; text-align: center;
+}
+@media(max-width:600px){ .proof-grid{grid-template-columns:1fr;} }
+.proof-stat .num {
+  font-size: 36px; font-weight: 900; color: var(--gold);
+  display: block; line-height: 1;
+}
+.proof-stat .desc { font-size: 12px; color: rgba(255,255,255,0.6); margin-top: 4px; }
+
+/* ─── SECTION COMMON ──────────────────────────────────── */
+section { padding: 80px 0; position: relative; z-index: 1; }
+.section-tag {
+  display: inline-block;
+  background: rgba(240,165,0,0.1);
+  border: 1px solid rgba(240,165,0,0.25);
+  color: var(--gold);
+  padding: 4px 14px; border-radius: 100px;
+  font-size: 11px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 1.5px;
+  margin-bottom: 12px;
+}
+.section-title {
+  font-family: 'Noto Sans Ethiopic', sans-serif;
+  font-size: clamp(22px, 3vw, 36px);
+  font-weight: 900; color: var(--navy);
+  line-height: 1.3; margin-bottom: 16px;
+}
+.section-sub { font-size: 16px; color: var(--muted); max-width: 600px; line-height: 1.7; }
+.text-center { text-align: center; }
+.text-center .section-sub { margin: 0 auto; }
+
+/* ─── PAIN SECTION ────────────────────────────────────── */
+.pain-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 48px; }
+@media(max-width:768px){ .pain-grid{grid-template-columns:1fr;} }
+.pain-card {
+  background: white; border-radius: var(--radius);
+  padding: 28px; border: 1px solid #E5E7EB;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.06);
+  transform: perspective(800px);
+  transition: all 0.4s ease;
+}
+.pain-card:hover { transform: perspective(800px) rotateX(3deg) translateY(-6px); box-shadow: var(--card-shadow); }
+.pain-icon { font-size: 36px; margin-bottom: 14px; }
+.pain-card h3 { font-size: 16px; font-weight: 700; color: var(--navy); margin-bottom: 8px; }
+.pain-card p { font-size: 14px; color: var(--muted); line-height: 1.7; }
+
+/* ─── LEARN SECTION ───────────────────────────────────── */
+.learn-section { background: var(--navy); }
+.learn-section .section-title { color: white; }
+.learn-section .section-sub { color: rgba(255,255,255,0.6); }
+.learn-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-top: 48px; }
+@media(max-width:768px){ .learn-grid{grid-template-columns:1fr;} }
+.learn-card {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: var(--radius); padding: 28px;
+  display: flex; gap: 18px; align-items: flex-start;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+}
+.learn-card:hover { background: rgba(255,255,255,0.1); transform: translateX(6px); }
+.learn-num {
+  background: var(--gold); color: var(--navy);
+  width: 40px; height: 40px; min-width: 40px;
+  border-radius: 12px; display: flex; align-items: center; justify-content: center;
+  font-size: 18px; font-weight: 900;
+}
+.learn-card h3 { font-size: 15px; font-weight: 700; color: white; margin-bottom: 6px; }
+.learn-card p { font-size: 13px; color: rgba(255,255,255,0.6); line-height: 1.6; }
+
+/* ─── OFFER STACK (HORMOZI) ───────────────────────────── */
+.offer-section { background: linear-gradient(180deg, #F7F8FC 0%, #ECEEF6 100%); }
+.offer-stack {
+  background: white; border-radius: 28px;
+  padding: 40px; max-width: 700px; margin: 48px auto 0;
+  box-shadow: var(--card-shadow);
+  border: 2px solid var(--border);
+  transform: perspective(1200px);
+  transition: transform 0.5s ease;
+}
+.offer-stack:hover { transform: perspective(1200px) rotateX(2deg); }
+.offer-title {
+  font-size: 14px; font-weight: 700; color: var(--muted);
+  text-transform: uppercase; letter-spacing: 1.5px;
+  margin-bottom: 24px; text-align: center;
+}
+.offer-item {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px 0; border-bottom: 1px solid #F0F0F0;
+  gap: 12px;
+}
+.offer-item:last-of-type { border-bottom: none; }
+.offer-item-left { display: flex; align-items: flex-start; gap: 12px; }
+.offer-check {
+  width: 28px; height: 28px; min-width: 28px;
+  background: linear-gradient(135deg, var(--gold), #E8950A);
+  border-radius: 8px; display: flex; align-items: center; justify-content: center;
+  font-size: 13px; color: var(--navy); font-weight: 900;
+}
+.offer-item-name { font-size: 14px; font-weight: 700; color: var(--navy); }
+.offer-item-desc { font-size: 12px; color: var(--muted); margin-top: 2px; }
+.offer-item-value {
+  font-size: 14px; font-weight: 700; color: var(--muted);
+  white-space: nowrap; text-decoration: line-through;
+}
+.offer-divider {
+  border: none; border-top: 2px dashed var(--border);
+  margin: 20px 0;
+}
+.offer-total { display: flex; justify-content: space-between; align-items: center; padding: 0 0 16px; }
+.offer-total-label { font-size: 14px; color: var(--muted); }
+.offer-total-value { font-size: 18px; font-weight: 900; color: var(--muted); text-decoration: line-through; }
+.offer-price-row { display: flex; justify-content: space-between; align-items: center; }
+.offer-price-label {
+  font-family: 'Noto Sans Ethiopic', sans-serif;
+  font-size: 16px; font-weight: 700; color: var(--navy);
+}
+.offer-price-label small { display: block; font-size: 11px; color: var(--red); font-weight: 600; }
+.offer-price {
+  font-size: 42px; font-weight: 900; color: var(--gold);
+  line-height: 1;
+}
+.offer-price sub { font-size: 18px; color: var(--muted); text-decoration: line-through; margin-left: 8px; }
+.offer-cta {
+  width: 100%; padding: 18px;
+  background: linear-gradient(135deg, var(--navy), var(--navy-mid));
+  color: white; font-size: 17px; font-weight: 800;
+  border: none; border-radius: 14px; cursor: pointer;
+  font-family: 'Noto Sans Ethiopic', sans-serif;
+  margin-top: 20px;
+  transition: all 0.3s ease;
+  box-shadow: 0 8px 30px rgba(13,27,62,0.3);
+  position: relative; overflow: hidden;
+}
+.offer-cta::after {
+  content: ''; position: absolute;
+  top: -50%; left: -75%; width: 50%; height: 200%;
+  background: rgba(255,255,255,0.1);
+  transform: skewX(-20deg);
+  animation: shimmer 3s ease-in-out infinite;
+}
+.offer-cta:hover { transform: translateY(-3px); box-shadow: 0 14px 40px rgba(13,27,62,0.4); }
+.guarantee-note { text-align: center; font-size: 12px; color: var(--muted); margin-top: 16px; }
+
+/* ─── TESTIMONIALS ────────────────────────────────────── */
+.testimonials-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 24px; margin-top: 48px; }
+@media(max-width:768px){ .testimonials-grid{grid-template-columns:1fr;} }
+.testimonial-card {
+  background: white; border-radius: var(--radius); padding: 28px;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.07);
+  border: 1px solid #E9ECEF;
+  transform: perspective(800px);
+  transition: all 0.4s ease;
+}
+.testimonial-card:hover { transform: perspective(800px) rotateY(4deg) translateY(-6px); box-shadow: var(--card-shadow); }
+.testimonial-stars { color: var(--gold); font-size: 16px; margin-bottom: 14px; }
+.testimonial-text { font-size: 14px; line-height: 1.7; color: var(--text); margin-bottom: 20px; font-style: italic; }
+.testimonial-author { display: flex; align-items: center; gap: 12px; }
+.testimonial-avatar {
+  width: 44px; height: 44px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--navy), var(--navy-mid));
+  display: flex; align-items: center; justify-content: center;
+  color: var(--gold); font-weight: 900; font-size: 16px;
+}
+.testimonial-name { font-size: 14px; font-weight: 700; color: var(--navy); }
+.testimonial-role { font-size: 12px; color: var(--muted); }
+
+/* ─── ABOUT HAMDI ─────────────────────────────────────── */
+.about-section { background: var(--bg); }
+.about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; margin-top: 20px; }
+@media(max-width:768px){ .about-grid{grid-template-columns:1fr;} }
+.about-photo {
+  background: linear-gradient(135deg, var(--navy) 0%, var(--navy-mid) 60%, var(--gold) 100%);
+  border-radius: 24px; aspect-ratio: 4/5; position: relative;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: var(--card-shadow);
+  overflow: hidden;
+}
+.about-photo-placeholder { color: rgba(255,255,255,0.3); font-size: 14px; text-align: center; padding: 20px; }
+.about-photo-placeholder strong { color: white; display: block; font-size: 16px; margin-bottom: 8px; }
+.result-badge {
+  position: absolute; background: white; border-radius: 14px;
+  padding: 12px 18px; box-shadow: 0 12px 40px rgba(0,0,0,0.15);
+  display: flex; flex-direction: column;
+}
+.result-badge-1 { bottom: 24px; right: -16px; }
+.result-badge .num { font-size: 22px; font-weight: 900; color: var(--navy); }
+.result-badge .lbl { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+.about-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 24px 0; }
+.about-stat {
+  background: white; border-radius: 16px; padding: 16px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.06); text-align: center;
+  border-left: 3px solid var(--gold);
+}
+.about-stat .n { font-size: 22px; font-weight: 900; color: var(--navy); }
+.about-stat .l { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+/* ─── GUARANTEE ───────────────────────────────────────── */
+.guarantee-section {
+  background: linear-gradient(135deg, var(--navy) 0%, #162550 100%);
+}
+.guarantee-box {
+  display: flex; gap: 32px; align-items: center;
+  background: rgba(255,255,255,0.06); border: 1px solid rgba(240,165,0,0.2);
+  border-radius: 24px; padding: 40px;
+  backdrop-filter: blur(10px);
+}
+@media(max-width:600px){ .guarantee-box{flex-direction:column; text-align:center;} }
+.guarantee-icon { font-size: 80px; min-width: 80px; text-align: center; }
+.guarantee-box h2 {
+  font-family: 'Noto Sans Ethiopic', sans-serif;
+  font-size: 26px; font-weight: 900; color: var(--gold); margin-bottom: 12px;
+}
+.guarantee-box p { font-size: 15px; color: rgba(255,255,255,0.7); line-height: 1.7; }
+
+/* ─── FINAL CTA ───────────────────────────────────────── */
+.final-cta-section {
+  background: linear-gradient(135deg, #FFF8EC 0%, #FFF3D6 100%);
+  border-top: 3px solid var(--gold);
+}
+.final-cta-section .section-title { color: var(--navy); }
+.final-form-card {
+  max-width: 520px; margin: 0 auto;
+  background: white; border-radius: var(--radius);
+  padding: 40px; box-shadow: var(--card-shadow);
+  border: 2px solid var(--border);
+}
+
+/* ─── FOOTER ──────────────────────────────────────────── */
+footer {
+  background: var(--navy); color: rgba(255,255,255,0.5);
+  padding: 28px; text-align: center; font-size: 12px;
+}
+footer strong { color: var(--gold); }
+
+/* ─── ANIMATIONS ──────────────────────────────────────── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeDown {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.reveal { opacity: 0; transform: translateY(40px); transition: all 0.7s ease; }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+/* ─── LOADING OVERLAY ─────────────────────────────────── */
+#loading-overlay {
+  position: fixed; inset: 0; background: var(--navy);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  z-index: 9999; transition: opacity 0.6s ease;
+}
+.loader-logo {
+  font-family: 'Noto Sans Ethiopic', sans-serif;
+  color: var(--gold); font-size: 28px; font-weight: 900; margin-bottom: 20px;
+}
+.loader-bar {
+  width: 200px; height: 4px;
+  background: rgba(255,255,255,0.1); border-radius: 4px; overflow: hidden;
+}
+.loader-fill {
+  height: 100%; background: var(--gold);
+  border-radius: 4px; animation: load 1.5s ease forwards;
+}
+@keyframes load { from{width:0;} to{width:100%;} }
+
+/* ─── PROOF SCREENSHOT CARDS ─────────────────────────── */
+.testimonials-grid { margin-bottom: 24px; }
+.proof-grid-bottom { display: grid; grid-template-columns: repeat(3,1fr); gap: 24px; margin-top: 0; }
+@media(max-width:768px){ .proof-grid-bottom{grid-template-columns:1fr;} }
+.proof-screenshot {
+  background: white; border-radius: var(--radius); padding: 18px;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+  border: 1px solid #E9ECEF;
+  transition: all 0.4s ease;
+}
+.proof-screenshot:hover { transform: translateY(-6px); box-shadow: var(--card-shadow); }
+.proof-label {
+  font-size: 11px; font-weight: 700; color: var(--navy);
+  margin-bottom: 12px; display: flex; align-items: center; gap: 6px;
+  background: rgba(240,165,0,0.1); padding: 5px 10px; border-radius: 6px;
+  width: fit-content;
+}
+.proof-screenshot img { border-radius: 10px; display: block; width: 100%; object-fit: cover; max-height: 280px; }
+.proof-caption { font-size: 11px; color: var(--muted); margin-top: 10px; text-align: center; line-height: 1.5; }
+</style>
+</head>
+<body>
+
+<!-- Loading Screen -->
+<div id="loading-overlay">
+  <div class="loader-logo">ሉይ ሲስተምስ</div>
+  <div class="loader-bar"><div class="loader-fill"></div></div>
+</div>
+
+<!-- Animated Background Blobs -->
+<div class="blobs">
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+</div>
+
+<!-- ████ STICKY COUNTDOWN BAR ████ -->
+<div class="countdown-bar">
+  <span class="fire">🔥</span>
+  <span class="label"><span class="am">ዌቢናሩ ይጀምራል:</span></span>
+  <div class="flip-clock">
+    <div class="flip-unit">
+      <div class="flip-num" id="cd-days">00</div>
+      <div class="flip-label">Days</div>
+    </div>
+    <div class="flip-sep">:</div>
+    <div class="flip-unit">
+      <div class="flip-num" id="cd-hours">00</div>
+      <div class="flip-label">Hours</div>
+    </div>
+    <div class="flip-sep">:</div>
+    <div class="flip-unit">
+      <div class="flip-num" id="cd-mins">00</div>
+      <div class="flip-label">Min</div>
+    </div>
+    <div class="flip-sep">:</div>
+    <div class="flip-unit">
+      <div class="flip-num" id="cd-secs">00</div>
+      <div class="flip-label">Sec</div>
+    </div>
+  </div>
+  <span class="label">🗓 <strong>May 15, 2026</strong></span>
+</div>
+
+<!-- ████ HERO ████ -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-grid">
+
+      <!-- Left: Copy + Form -->
+      <div class="hero-left">
+        <div class="badge-pill">
+          <span class="badge-dot"></span>
+          <span>ቦታ ውስን ነው — Limited Spots Available</span>
+        </div>
+
+        <h1 class="hero-headline">
+          ሰኔ 30 ቀረበ —<br>
+          <span class="red">የእርስዎ ንግድ</span><br>
+          <span class="gold">ዝግጁ ነው?</span>
+        </h1>
+
+        <p class="hero-sub">
+          <strong>ምንም ዋጋ አይከፍሉም።</strong> ሜይ 15 ላይ ብቻ ይቀላቀሉ — 75 ደቂቃ ውስጥ የኢትዮጵያ ንግድ ቤት ባለቤቶች ሰኔ 30 ከደርሶ በፊት ማወቅ ያለባቸውን ሁሉ እናካፍላለን።
+          <br><br>
+          In 75 minutes, you will know exactly which documents you need, which tax deductions you are missing, and how to face any audit with full confidence.
+        </p>
+
+        <ul class="hero-bullets">
+          <li>The #1 document Ethiopian auditors check first (most businesses don't have it)</li>
+          <li>5 legal tax deductions 90% of business owners miss every year</li>
+          <li>The exact Sene 30 checklist — nothing missed, nothing wrong</li>
+          <li>How to legally reduce your tax bill before the deadline</li>
+          <li>The Luy Systems 5-step system used by real Ethiopian businesses</li>
+        </ul>
+
+        <!-- Form Card -->
+        <div class="reg-card">
+          <div class="spots-left">⚠️ Only <span id="spots-count">47</span> spots remaining — registrations close soon</div>
+          <div class="reg-title am">ቦታዎን አሁን ያስይዙ — ነፃ ነው</div>
+          <div class="reg-subtitle">Reserve your free seat for May 15 webinar</div>
+
+          <form id="reg-form" onsubmit="submitForm(event)">
+            <div class="form-group">
+              <label>ሙሉ ስምዎ / Full Name *</label>
+              <input type="text" name="name" placeholder="ስምዎን ያስገቡ..." required>
+            </div>
+            <div class="form-group">
+              <label>ስልክ ቁጥር / Phone Number *</label>
+              <input type="tel" name="phone" placeholder="+251 9XX XXX XXX" required>
+            </div>
+            <div class="form-group">
+              <label>ኢሜይል / Email Address *</label>
+              <input type="email" name="email" placeholder="name@example.com" required>
+            </div>
+            <button type="submit" class="btn-register am">
+              አሁን ይመዝገቡ — ቦታዬን አስጠብቅ ✓
+            </button>
+          </form>
+
+          <div class="form-trust">
+            <span>🔒 100% Secure</span>
+            <span>✓ Free forever</span>
+            <span>📱 Telegram access instant</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: VSL Video -->
+      <div class="hero-video-wrap">
+        <div class="video-container" id="video-container">
+          <iframe
+            src="https://www.youtube.com/embed/92V69LLH5mQ?rel=0&modestbranding=1"
+            title="ሰኔ 30 Survival Guide — Hamdi Adil"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen>
+          </iframe>
+        </div>
+
+        <!-- Floating Badges -->
+        <div class="floating-badge floating-badge-1">
+          <span class="badge-icon">🏆</span>
+          <div>
+            <div style="font-size:13px;font-weight:900;color:#0D1B3E;">2.4M+ ETB</div>
+            <div style="font-size:10px;color:#6B7280;">Built from zero</div>
+          </div>
+        </div>
+        <div class="floating-badge floating-badge-2">
+          <span class="badge-icon">👥</span>
+          <div>
+            <div style="font-size:13px;font-weight:900;color:#0D1B3E;"><span class="counter" data-target="167">0</span>+ Students</div>
+            <div style="font-size:10px;color:#6B7280;">In previous webinar</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ████ SOCIAL PROOF BAR ████ -->
+<div class="proof-bar">
+  <div class="container">
+    <div class="proof-grid">
+      <div class="proof-stat">
+        <span class="num counter" data-target="342">0</span>
+        <span class="desc">People Already Registered</span>
+      </div>
+      <div class="proof-stat">
+        <span class="num">2.4M+</span>
+        <span class="desc">ETB Built by Hamdi from Zero</span>
+      </div>
+      <div class="proof-stat">
+        <span class="num counter" data-target="167">0</span>
+        <span class="desc">Students in Last Webinar</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ████ PAIN SECTION ████ -->
+<section class="reveal">
+  <div class="container">
+    <div class="text-center">
+      <div class="section-tag">The Problem</div>
+      <h2 class="section-title">ሰኔ 30 ብዙ ንግዶችን ያበርሳል<br><small style="font-size:0.7em;font-weight:400;color:#6B7280;">Sene 30 destroys businesses every year. Yours doesn't have to be one of them.</small></h2>
+    </div>
+    <div class="pain-grid">
+      <div class="pain-card reveal">
+        <div class="pain-icon">😰</div>
+        <h3>Unexpected Tax Bills</h3>
+        <p>One client came to me with a 180,000 birr unexpected tax bill. One missing document caused it. By the time they called, it was too late to fix.</p>
+      </div>
+      <div class="pain-card reveal">
+        <div class="pain-icon">📋</div>
+        <h3>Failed Audits</h3>
+        <p>Ethiopian tax auditors have a checklist. If your business doesn't have the right records, you fail — regardless of whether you paid your taxes.</p>
+      </div>
+      <div class="pain-card reveal">
+        <div class="pain-icon">💸</div>
+        <h3>Overpaying Tax</h3>
+        <p>90% of Ethiopian business owners miss at least 3 legal deductions. Every year they pay more than they legally need to.</p>
+      </div>
+      <div class="pain-card reveal">
+        <div class="pain-icon">🕐</div>
+        <h3>Running Out of Time</h3>
+        <p>Sene 30 doesn't move. Every day you wait is a day less to prepare. The businesses that panic wait until the last week. Don't be them.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ████ WHAT YOU'LL LEARN ████ -->
+<section class="learn-section reveal">
+  <div class="container">
+    <div class="text-center">
+      <div class="section-tag" style="background:rgba(240,165,0,0.2);color:var(--gold-light);">በዌቢናሩ ውስጥ</div>
+      <h2 class="section-title">What You'll Learn in 75 Minutes</h2>
+      <p class="section-sub">Everything your accountant should have told you — taught in plain language, with real Ethiopian examples.</p>
+    </div>
+    <div class="learn-grid">
+      <div class="learn-card reveal">
+        <div class="learn-num">1</div>
+        <div>
+          <h3>What Auditors Check First</h3>
+          <p>The exact document Ethiopian tax auditors open before anything else — and how to have it perfectly prepared.</p>
+        </div>
+      </div>
+      <div class="learn-card reveal">
+        <div class="learn-num">2</div>
+        <div>
+          <h3>The 5 Critical Documents</h3>
+          <p>A complete checklist of every record your business must have ready by Sene 30. Nothing left out.</p>
+        </div>
+      </div>
+      <div class="learn-card reveal">
+        <div class="learn-num">3</div>
+        <div>
+          <h3>Legal Tax Deductions You're Missing</h3>
+          <p>5 deductions most Ethiopian businesses never claim — with real birr examples of how much you could save.</p>
+        </div>
+      </div>
+      <div class="learn-card reveal">
+        <div class="learn-num">4</div>
+        <div>
+          <h3>The Luy Systems Tax Blueprint</h3>
+          <p>The exact 5-step system used by Hamdi's clients to prepare for Sene 30 without stress or surprises.</p>
+        </div>
+      </div>
+      <div class="learn-card reveal">
+        <div class="learn-num">5</div>
+        <div>
+          <h3>After Sene 30 — The System</h3>
+          <p>Build a year-round tax tracking system so next Sene 30 takes you 2 hours, not 2 weeks of panic.</p>
+        </div>
+      </div>
+      <div class="learn-card reveal">
+        <div class="learn-num">6</div>
+        <div>
+          <h3>Live Q&amp;A with Hamdi</h3>
+          <p>Ask your specific business questions. Get real answers. No generic advice — your business, your situation.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ████ HORMOZI OFFER STACK ████ -->
+<section class="offer-section reveal">
+  <div class="container">
+    <div class="text-center">
+      <div class="section-tag">The Offer</div>
+      <h2 class="section-title">ምን ያገኛሉ — Here's Everything You Get</h2>
+      <p class="section-sub">This webinar is completely free. Here is the full value of what you're getting today.</p>
+    </div>
+
+    <div class="offer-stack">
+      <div class="offer-title">🎁 Everything included — total value:</div>
+
+      <div class="offer-item">
+        <div class="offer-item-left">
+          <div class="offer-check">✓</div>
+          <div>
+            <div class="offer-item-name">🎥 The Sene 30 Survival Guide Webinar (Live)</div>
+            <div class="offer-item-desc">75-minute live training — exactly what to do before Sene 30</div>
+          </div>
+        </div>
+        <div class="offer-item-value">2,000 birr</div>
+      </div>
+
+      <div class="offer-item">
+        <div class="offer-item-left">
+          <div class="offer-check">✓</div>
+          <div>
+            <div class="offer-item-name">📋 Sene 30 Checklist PDF</div>
+            <div class="offer-item-desc">Every document your business needs — nothing missed</div>
+          </div>
+        </div>
+        <div class="offer-item-value">500 birr</div>
+      </div>
+
+      <div class="offer-item">
+        <div class="offer-item-left">
+          <div class="offer-check">✓</div>
+          <div>
+            <div class="offer-item-name">📊 Receipt &amp; Documentation Tracker</div>
+            <div class="offer-item-desc">Excel template — plug your numbers in, know where you stand</div>
+          </div>
+        </div>
+        <div class="offer-item-value">500 birr</div>
+      </div>
+
+      <div class="offer-item">
+        <div class="offer-item-left">
+          <div class="offer-check">✓</div>
+          <div>
+            <div class="offer-item-name">💡 Tax Deduction Cheat Sheet</div>
+            <div class="offer-item-desc">Every legal deduction Ethiopian businesses qualify for</div>
+          </div>
+        </div>
+        <div class="offer-item-value">500 birr</div>
+      </div>
+
+      <div class="offer-item">
+        <div class="offer-item-left">
+          <div class="offer-check">✓</div>
+          <div>
+            <div class="offer-item-name">📱 Private Telegram Community</div>
+            <div class="offer-item-desc">Exclusive group — ask questions, get answers, connect with other Ethiopian entrepreneurs</div>
+          </div>
+        </div>
+        <div class="offer-item-value">2,000 birr</div>
+      </div>
+
+      <hr class="offer-divider">
+
+      <div class="offer-total">
+        <span class="offer-total-label">Total Value:</span>
+        <span class="offer-total-value">5,500 birr</span>
+      </div>
+
+      <div class="offer-price-row">
+        <div class="offer-price-label">
+          ዋጋዎ ዛሬ
+          <small>🔥 ሙሉ በሙሉ ነፃ — Completely Free Today</small>
+        </div>
+        <div class="offer-price">
+          0 birr
+          <sub>5,500 birr</sub>
+        </div>
+      </div>
+
+      <button class="offer-cta am" onclick="scrollToForm()">
+        ቦታዬን አሁን አስይዝ — Free Webinar → Register Now ✓
+      </button>
+      <div class="guarantee-note">🔒 Your information is 100% secure. No spam. No payment required. Ever.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ████ TESTIMONIALS ████ -->
+<section class="reveal">
+  <div class="container">
+    <div class="text-center">
+      <div class="section-tag">ምስክርነቶች — Real Results</div>
+      <h2 class="section-title">Real Ethiopian Businesses.<br>Real Results with Hamdi.</h2>
+      <p class="section-sub">These are real people, real messages, and real documents — not made up.</p>
+    </div>
+
+    <!-- Row 1: Text testimonials -->
+    <div class="testimonials-grid">
+
+      <!-- Zee -->
+      <div class="testimonial-card reveal">
+        <div class="testimonial-stars">★★★★★</div>
+        <p class="testimonial-text">"My PLC with your help looks like this on TikTok. Everyone keeps asking me how I did it — I always tell them, go to Hamdi."</p>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar" style="background:linear-gradient(135deg,#FF6B9D,#C848FF);font-size:16px;">Z</div>
+          <div>
+            <div class="testimonial-name">Zee</div>
+            <div class="testimonial-role">
+              <a href="https://www.tiktok.com/@hyssopaesthetics?_r=1&_t=ZS-9608WGAJr53" target="_blank" rel="noopener" style="color:#0088CC;text-decoration:none;font-size:11px;font-weight:600;">@hyssopaesthetics on TikTok ↗</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Melkamu -->
+      <div class="testimonial-card reveal">
+        <div class="testimonial-stars">★★★★★</div>
+        <p class="testimonial-text" style="font-family:'Noto Sans Ethiopic',sans-serif;font-size:13px;line-height:1.8;">"አሁን ለግዜው ምን አልፈልግም። መጀመሪያ የአንተን ፔጆች ያሉትን ጠቃሚ ሀሳቦች በደንብ ከአየሁት በሃላ የምፈልገውን ጥያቄዎች እጠይቃለለሁ። ለሁሉም ነገር በቅድሚያ አመሰግናለሁ።"</p>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar" style="background:linear-gradient(135deg,#0D1B3E,#1A2D5A);">M</div>
+          <div>
+            <div class="testimonial-name">Melkamu</div>
+            <div class="testimonial-role">Ethiopian entrepreneur</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Natan -->
+      <div class="testimonial-card reveal">
+        <div class="testimonial-stars">★★★★★</div>
+        <p class="testimonial-text">"Hey man, memesrechawun bemigeba yale minim tiyaqe newu yastedequlign. Thank you for your support, it was amazing to have someone like you. It is really weird for someone new to the process."</p>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar" style="background:linear-gradient(135deg,#10B981,#059669);">N</div>
+          <div>
+            <div class="testimonial-name">Natan</div>
+            <div class="testimonial-role">New business owner, Ethiopia</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Row 2: Real proof screenshots -->
+    <div class="proof-grid-bottom">
+
+      <div class="proof-screenshot reveal">
+        <div class="proof-label">📸 Live Client Consultation</div>
+        <img src="testimonial-1.png" alt="Hamdi on a live consultation call with a client">
+        <div class="proof-caption">Real consultation session — Hamdi working directly with a business owner on their systems</div>
+      </div>
+
+      <div class="proof-screenshot reveal">
+        <div class="proof-label">✅ Real Client PLC — Registered</div>
+        <img src="testimonial-4.jpg" alt="Actual PLC document for a client" style="max-height:320px;">
+        <div class="proof-caption">Natan's actual ኃላፊነቱ የተወሰነ የግል ማህበር (PLC) — registered with Hamdi's direct guidance</div>
+      </div>
+
+      <div class="proof-screenshot reveal">
+        <div class="proof-label">✅ Commercial Registration — Client Result</div>
+        <img src="testimonial-5.jpg" alt="Commercial Registration Certificate" style="max-height:320px;">
+        <div class="proof-caption">MN Coffee Processing PLC — another client's official Commercial Registration Certificate, fully stamped</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ████ ABOUT HAMDI ████ -->
+<section class="about-section reveal">
+  <div class="container">
+    <div class="about-grid">
+      <div class="about-photo">
+        <img src="hamdi-photo.jpg" style="width:100%;height:100%;object-fit:cover;object-position:top;border-radius:24px;position:absolute;inset:0;" alt="Hamdi Adil — Luy Systems">
+        <div class="result-badge result-badge-1">
+          <span class="num">2.4M+</span>
+          <span class="lbl">ETB Built</span>
+        </div>
+      </div>
+      <div>
+        <div class="section-tag">About Your Host</div>
+        <h2 class="section-title">Hamdi Adil</h2>
+        <p style="font-size:15px;color:#6B7280;line-height:1.8;margin-bottom:24px;">
+          Founder of <strong>Luy Systems</strong> — Ethiopia's business systems and finance consulting firm. Hamdi went from zero to 2.4 million birr in under 2 years, built on the same business and tax systems he teaches.
+          <br><br>
+          He has helped hundreds of Ethiopian entrepreneurs register their businesses correctly, prepare for audits confidently, and legally reduce their tax bills — so they keep more of what they earn.
+        </p>
+        <div class="about-stats">
+          <div class="about-stat">
+            <div class="n">2.4M+</div>
+            <div class="l">ETB built from zero</div>
+          </div>
+          <div class="about-stat">
+            <div class="n">167+</div>
+            <div class="l">Webinar students</div>
+          </div>
+          <div class="about-stat">
+            <div class="n">100K</div>
+            <div class="l">Birr from 1 webinar</div>
+          </div>
+          <div class="about-stat">
+            <div class="n">#1</div>
+            <div class="l">Goal: Ethiopia's business consultancy</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ████ GUARANTEE ████ -->
+<section class="guarantee-section reveal">
+  <div class="container">
+    <div class="guarantee-box">
+      <div class="guarantee-icon">🛡️</div>
+      <div>
+        <h2>ምንም አደጋ የለም — Zero Risk Guarantee</h2>
+        <p>This webinar is completely free. You risk nothing by attending. If you show up and don't learn a single thing that helps your business, you owe us nothing — because you paid nothing. The only risk is <em>not</em> showing up and facing Sene 30 unprepared.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ████ FINAL CTA ████ -->
+<section class="final-cta-section reveal" id="final-cta">
+  <div class="container text-center">
+    <div class="section-tag">Last Chance</div>
+    <h2 class="section-title">ሰኔ 30 ዕለቱን አያዛምድም —<br>ዛሬ ቦታዎን ይያዙ</h2>
+    <p class="section-sub" style="margin:0 auto 40px;">Sene 30 doesn't move. The deadline is fixed. Register now and walk into that deadline with a plan, not panic.</p>
+
+    <div class="final-form-card">
+      <div class="spots-left">⚠️ <span id="spots-count-2">47</span> spots remaining</div>
+      <form id="reg-form-2" onsubmit="submitForm(event, 'final-cta')">
+        <div class="form-group" style="text-align:left;">
+          <label>ሙሉ ስምዎ / Full Name *</label>
+          <input type="text" name="name" placeholder="ስምዎን ያስገቡ..." required>
+        </div>
+        <div class="form-group" style="text-align:left;">
+          <label>ስልክ ቁጥር / Phone Number *</label>
+          <input type="tel" name="phone" placeholder="+251 9XX XXX XXX" required>
+        </div>
+        <div class="form-group" style="text-align:left;">
+          <label>ኢሜይል / Email *</label>
+          <input type="email" name="email" placeholder="name@example.com" required>
+        </div>
+        <button type="submit" class="btn-register am" style="font-size:16px;">
+          ቦታዬን አስጠብቅ — Register Free Now ✓
+        </button>
+      </form>
+      <div class="form-trust" style="margin-top:16px;">
+        <span>🔒 100% Secure</span>
+        <span>✓ Free forever</span>
+        <span>📱 Instant Telegram access</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ████ FOOTER ████ -->
+<footer>
+  <p>© 2026 <strong>Luy Systems</strong> — Hamdi Adil | TikTok: <strong>@hamdifeki</strong></p>
+  <p style="margin-top:8px;font-size:11px;">This webinar is for educational purposes. Results may vary. Consult a licensed accountant for your specific tax situation.</p>
+</footer>
+
+<!-- ████ SCRIPTS ████ -->
+<script>
+
+// ── CONFIG ──────────────────────────────────────────────
+const CONFIG = {
+  // REPLACE with your Google Apps Script Web App URL
+  GOOGLE_SHEET_URL: 'https://script.google.com/macros/s/AKfycbwXDwICPW19OPYEMgFqV3iKXshGDM2mDrNsyNHO5v3xpL0y-CgEC7h9sRTjwmGVaa4n/exec',
+  // REPLACE with your Telegram group invite link
+  TELEGRAM_INVITE: 'https://https://t.me/sene30hamdifeki',
+  // Webinar date: May 15 2026 at 8PM Addis Ababa time (EAT = UTC+3)
+  WEBINAR_DATE: new Date('2026-05-15T17:07:35.000Z'),
+  // Admin password (change this)
+  ADMIN_PASS: 'sene30'
+};
+
+// ── LOADING SCREEN ───────────────────────────────────────
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    const overlay = document.getElementById('loading-overlay');
+    overlay.style.opacity = '0';
+    setTimeout(() => overlay.style.display = 'none', 600);
+  }, 1800);
+});
+
+// ── COUNTDOWN TIMER ──────────────────────────────────────
+function updateCountdown() {
+  const now = new Date();
+  const diff = CONFIG.WEBINAR_DATE - now;
+  if (diff <= 0) {
+    document.querySelector('.countdown-bar').innerHTML = '<span style="color:var(--gold-light);font-weight:700;">🔴 Webinar is LIVE now! Join on Telegram.</span>';
+    return;
+  }
+  const d = Math.floor(diff / 86400000);
+  const h = Math.floor((diff % 86400000) / 3600000);
+  const m = Math.floor((diff % 3600000) / 60000);
+  const s = Math.floor((diff % 60000) / 1000);
+  const fmt = n => String(n).padStart(2,'0');
+  document.getElementById('cd-days').textContent = fmt(d);
+  document.getElementById('cd-hours').textContent = fmt(h);
+  document.getElementById('cd-mins').textContent = fmt(m);
+  document.getElementById('cd-secs').textContent = fmt(s);
+}
+updateCountdown();
+setInterval(updateCountdown, 1000);
+
+// ── SPOTS COUNTDOWN (fake urgency, update manually or remove) ──
+let spots = 47;
+function decreaseSpots() {
+  if (spots > 12 && Math.random() > 0.7) {
+    spots--;
+    document.querySelectorAll('#spots-count, #spots-count-2').forEach(el => el.textContent = spots);
+  }
+}
+setInterval(decreaseSpots, 45000);
+
+// ── SCROLL REVEAL ────────────────────────────────────────
+const revealEls = document.querySelectorAll('.reveal');
+const revealObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.12 });
+revealEls.forEach(el => revealObs.observe(el));
+
+// ── COUNTERS ─────────────────────────────────────────────
+function animateCounter(el) {
+  const target = parseInt(el.dataset.target);
+  let current = 0;
+  const increment = Math.ceil(target / 60);
+  const timer = setInterval(() => {
+    current += increment;
+    if (current >= target) { el.textContent = target.toLocaleString(); clearInterval(timer); return; }
+    el.textContent = current.toLocaleString();
+  }, 30);
+}
+const counterObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      animateCounter(e.target);
+      counterObs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.5 });
+document.querySelectorAll('.counter').forEach(el => counterObs.observe(el));
+
+// ── 3D TILT ON CARDS ─────────────────────────────────────
+document.querySelectorAll('.pain-card, .testimonial-card, .reg-card, .offer-stack').forEach(card => {
+  card.addEventListener('mousemove', (e) => {
+    const rect = card.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / rect.width - 0.5;
+    const y = (e.clientY - rect.top) / rect.height - 0.5;
+    card.style.transform = `perspective(800px) rotateY(${x * 8}deg) rotateX(${-y * 8}deg) translateY(-4px)`;
+  });
+  card.addEventListener('mouseleave', () => {
+    card.style.transform = 'perspective(800px) rotateY(0deg) rotateX(0deg) translateY(0)';
+  });
+});
+
+// ── SCROLL TO FORM ───────────────────────────────────────
+function scrollToForm() {
+  document.getElementById('final-cta').scrollIntoView({ behavior: 'smooth' });
+}
+
+// ── FORM SUBMISSION ──────────────────────────────────────
+async function submitForm(e, source = 'hero') {
+  e.preventDefault();
+  const form = e.target;
+  const btn = form.querySelector('button[type="submit"]');
+  const data = {
+    name: form.name.value.trim(),
+    phone: form.phone.value.trim(),
+    email: form.email.value.trim(),
+    source: source,
+    timestamp: new Date().toISOString()
+  };
+
+  // Save to localStorage as backup
+  const registrations = JSON.parse(localStorage.getItem('luy_registrations') || '[]');
+  registrations.push(data);
+  localStorage.setItem('luy_registrations', JSON.stringify(registrations));
+
+  // Send to Google Sheets
+  btn.textContent = '⏳ Registering...';
+  btn.disabled = true;
+  try {
+    await fetch(CONFIG.GOOGLE_SHEET_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+  } catch (err) {
+    console.log('Sheet save failed, data in localStorage:', err);
+  }
+
+  // Redirect to confirmation page
+  const params = new URLSearchParams({
+    name: data.name,
+    telegram: CONFIG.TELEGRAM_INVITE
+  });
+  window.location.href = `funnel-confirm.html?${params.toString()}`;
+}
+
+</script>
+</body>
+</html>
