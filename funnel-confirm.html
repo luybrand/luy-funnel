@@ -301,7 +301,7 @@ function shareTelegram() {
   window.open('https://t.me/share/url?url=' + encodeURIComponent(window.location.origin + '/funnel-vsl.html') + '&text=' + text, '_blank');
 }
 function copyLink() {
-  const link = window.location.origin + '/funnel-vsl.html';
+  const link = window.location.href.replace('funnel-confirm.html', 'funnel-vsl.html');
   navigator.clipboard.writeText(link).then(() => {
     const btn = document.querySelector('.share-copy');
     btn.textContent = '✓ Copied!'; btn.style.background = '#D1FAE5'; btn.style.color = '#065F46';
